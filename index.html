@@ -1,119 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kanban — Task Board</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanban Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Background grain texture overlay -->
-  <div class="grain"></div>
-
-  <!-- ══ HEADER ══ -->
-  <header class="header">
-    <div class="header-eyebrow">
-      <span class="mono">BOARD / v1.0</span>
-      <span class="divider">·</span>
-      <span class="mono" id="live-date"></span>
+<header>
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="2"/><rect x="14" y="3" width="7" height="11" rx="2"/><rect x="14" y="17" width="7" height="4" rx="2"/></svg>
     </div>
-    <div class="header-main">
-      <h1 class="wordmark">KANBAN</h1>
-      <div class="header-controls">
-        <span class="task-counter mono" id="stat">— tasks</span>
-        <button class="btn-clear" id="clear-btn">Clear Board</button>
+    <h1>Kanban</h1>
+  </div>
+  <div class="header-right">
+    <span class="stat-pill" id="stat">0 tasks</span>
+    <button class="clear-btn" onclick="clearAll()">Clear all</button>
+  </div>
+</header>
+
+<div class="board">
+
+  <!-- TO DO -->
+  <div class="column" data-col="todo" id="col-todo">
+    <div class="col-top">
+      <span class="col-label"><span class="col-dot"></span>To Do</span>
+      <span class="col-count" id="cnt-todo">0</span>
+    </div>
+    <div class="cards-zone" id="zone-todo">
+      <div class="drop-ghost"></div>
+    </div>
+    <div class="col-bottom">
+      <button class="add-task-btn" id="open-btn" onclick="openForm()">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/>
+        </svg>
+        Add a task
+      </button>
+      <div class="inline-form" id="inline-form">
+        <input class="f-input" id="f-title" placeholder="Task title…" autocomplete="off" />
+        <textarea class="f-textarea" id="f-desc" rows="2" placeholder="Description (optional)…"></textarea>
+        <div class="f-actions">
+          <button class="btn-submit" onclick="addTask()">Add Task</button>
+          <button class="btn-dismiss" onclick="closeForm()">Cancel</button>
+        </div>
       </div>
     </div>
-    <div class="header-rule"></div>
-  </header>
+  </div>
 
-  <!-- ══ BOARD ══ -->
-  <main class="board">
+  <!-- IN PROGRESS -->
+  <div class="column" data-col="progress" id="col-progress">
+    <div class="col-top">
+      <span class="col-label"><span class="col-dot"></span>In Progress</span>
+      <span class="col-count" id="cnt-progress">0</span>
+    </div>
+    <div class="cards-zone" id="zone-progress">
+      <div class="drop-ghost"></div>
+    </div>
+    <div class="col-bottom"></div>
+  </div>
 
-    <!-- TO DO -->
-    <section class="column" data-col="todo" id="col-todo">
-      <div class="col-header">
-        <div class="col-tag todo-tag">
-          <span class="col-num" id="cnt-todo">00</span>
-          <span class="col-name">TO DO</span>
-        </div>
-        <div class="col-rule"></div>
-      </div>
+  <!-- DONE -->
+  <div class="column" data-col="done" id="col-done">
+    <div class="col-top">
+      <span class="col-label"><span class="col-dot"></span>Done</span>
+      <span class="col-count" id="cnt-done">0</span>
+    </div>
+    <div class="cards-zone" id="zone-done">
+      <div class="drop-ghost"></div>
+    </div>
+    <div class="col-bottom"></div>
+  </div>
 
-      <div class="cards-zone" id="zone-todo">
-        <div class="drop-ghost"></div>
-      </div>
+</div>
 
-      <!-- Add form lives ONLY in Todo -->
-      <div class="add-area" id="add-area">
-        <button class="add-trigger" id="open-btn" onclick="openForm()">
-          <span class="plus-icon">+</span>
-          <span>New task</span>
-        </button>
-        <form class="task-form" id="task-form" onsubmit="return false;">
-          <div class="form-field">
-            <label class="form-label mono">TITLE *</label>
-            <input class="form-input" id="f-title" type="text" placeholder="What needs doing?" autocomplete="off" />
-          </div>
-          <div class="form-field">
-            <label class="form-label mono">NOTES</label>
-            <textarea class="form-textarea" id="f-desc" rows="2" placeholder="Optional details…"></textarea>
-          </div>
-          <div class="form-actions">
-            <button class="btn-post" onclick="addTask()">Post Task</button>
-            <button class="btn-discard" type="button" onclick="closeForm()">Discard</button>
-          </div>
-        </form>
-      </div>
-    </section>
+<p class="hint">Press <kbd>N</kbd> to add · <kbd>Enter</kbd> to confirm · <kbd>Esc</kbd> to cancel · Drag cards between columns</p>
+<div class="toast" id="toast"></div>
 
-    <!-- IN PROGRESS -->
-    <section class="column" data-col="progress" id="col-progress">
-      <div class="col-header">
-        <div class="col-tag progress-tag">
-          <span class="col-num" id="cnt-progress">00</span>
-          <span class="col-name">IN PROGRESS</span>
-        </div>
-        <div class="col-rule"></div>
-      </div>
-      <div class="cards-zone" id="zone-progress">
-        <div class="drop-ghost"></div>
-      </div>
-    </section>
-
-    <!-- DONE -->
-    <section class="column" data-col="done" id="col-done">
-      <div class="col-header">
-        <div class="col-tag done-tag">
-          <span class="col-num" id="cnt-done">00</span>
-          <span class="col-name">DONE</span>
-        </div>
-        <div class="col-rule"></div>
-      </div>
-      <div class="cards-zone" id="zone-done">
-        <div class="drop-ghost"></div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ══ TOAST ══ -->
-  <div class="toast" id="toast"></div>
-
-  <!-- ══ HINT BAR ══ -->
-  <footer class="hint-bar">
-    <span class="mono">N — new task</span>
-    <span class="dot">·</span>
-    <span class="mono">ENTER — confirm</span>
-    <span class="dot">·</span>
-    <span class="mono">ESC — cancel</span>
-    <span class="dot">·</span>
-    <span class="mono">DRAG — move cards</span>
-  </footer>
-
-  <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
