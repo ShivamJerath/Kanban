@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanban — Task Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background grain texture overlay -->
+  <div class="grain"></div>
+
+  <!-- ══ HEADER ══ -->
+  <header class="header">
+    <div class="header-eyebrow">
+      <span class="mono">BOARD / v1.0</span>
+      <span class="divider">·</span>
+      <span class="mono" id="live-date"></span>
+    </div>
+    <div class="header-main">
+      <h1 class="wordmark">KANBAN</h1>
+      <div class="header-controls">
+        <span class="task-counter mono" id="stat">— tasks</span>
+        <button class="btn-clear" id="clear-btn">Clear Board</button>
+      </div>
+    </div>
+    <div class="header-rule"></div>
+  </header>
+
+  <!-- ══ BOARD ══ -->
+  <main class="board">
+
+    <!-- TO DO -->
+    <section class="column" data-col="todo" id="col-todo">
+      <div class="col-header">
+        <div class="col-tag todo-tag">
+          <span class="col-num" id="cnt-todo">00</span>
+          <span class="col-name">TO DO</span>
+        </div>
+        <div class="col-rule"></div>
+      </div>
+
+      <div class="cards-zone" id="zone-todo">
+        <div class="drop-ghost"></div>
+      </div>
+
+      <!-- Add form lives ONLY in Todo -->
+      <div class="add-area" id="add-area">
+        <button class="add-trigger" id="open-btn" onclick="openForm()">
+          <span class="plus-icon">+</span>
+          <span>New task</span>
+        </button>
+        <form class="task-form" id="task-form" onsubmit="return false;">
+          <div class="form-field">
+            <label class="form-label mono">TITLE *</label>
+            <input class="form-input" id="f-title" type="text" placeholder="What needs doing?" autocomplete="off" />
+          </div>
+          <div class="form-field">
+            <label class="form-label mono">NOTES</label>
+            <textarea class="form-textarea" id="f-desc" rows="2" placeholder="Optional details…"></textarea>
+          </div>
+          <div class="form-actions">
+            <button class="btn-post" onclick="addTask()">Post Task</button>
+            <button class="btn-discard" type="button" onclick="closeForm()">Discard</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- IN PROGRESS -->
+    <section class="column" data-col="progress" id="col-progress">
+      <div class="col-header">
+        <div class="col-tag progress-tag">
+          <span class="col-num" id="cnt-progress">00</span>
+          <span class="col-name">IN PROGRESS</span>
+        </div>
+        <div class="col-rule"></div>
+      </div>
+      <div class="cards-zone" id="zone-progress">
+        <div class="drop-ghost"></div>
+      </div>
+    </section>
+
+    <!-- DONE -->
+    <section class="column" data-col="done" id="col-done">
+      <div class="col-header">
+        <div class="col-tag done-tag">
+          <span class="col-num" id="cnt-done">00</span>
+          <span class="col-name">DONE</span>
+        </div>
+        <div class="col-rule"></div>
+      </div>
+      <div class="cards-zone" id="zone-done">
+        <div class="drop-ghost"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══ TOAST ══ -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ══ HINT BAR ══ -->
+  <footer class="hint-bar">
+    <span class="mono">N — new task</span>
+    <span class="dot">·</span>
+    <span class="mono">ENTER — confirm</span>
+    <span class="dot">·</span>
+    <span class="mono">ESC — cancel</span>
+    <span class="dot">·</span>
+    <span class="mono">DRAG — move cards</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
